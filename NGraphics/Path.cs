@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NGraphics
 {
@@ -183,7 +184,7 @@ namespace NGraphics
 			Add (new ClosePath ());
 		}
 
-		public bool Contains (Point point)
+		public bool Contains (Point point, bool useTransform = false)
 		{
 			var verts = new List<Point> ();
 			foreach (var o in Operations) {
@@ -203,6 +204,12 @@ namespace NGraphics
 				}
 				throw new NotSupportedException ("Contains does not support " + o);
 			}
+
+			if (useTransform && Transform != NGraphics.Transform.Identity)
+			{
+				verts = verts.Select(vert => Transform.TransformPoint(vert)).ToList();
+			}
+			
 			int i, j;
 			var c = false;
 			var nverts = verts.Count;

@@ -30,6 +30,25 @@ namespace NGraphics.Test
 		}
 
 		[Test]
+		public void ContainsWithTransform ()
+		{
+			var p = new Path ();
+			p.MoveTo (new Point (0, 0));
+			p.LineTo (new Point (100, 0));
+			p.LineTo (new Point (100, 50));
+			p.Close ();
+
+			p.Transform = NGraphics.Transform.Translate (100, 100);
+			Assert.IsFalse (p.Contains (new Point (0, 0), true));
+			Assert.IsFalse (p.Contains (new Point (99, 49), true));
+
+			Assert.IsFalse (p.Contains (new Point (100, 101), true));
+			Assert.IsTrue (p.Contains (new Point (100, 100), true));
+			Assert.IsTrue (p.Contains (new Point (199, 149), true));
+			Assert.IsFalse (p.Contains (new Point (150, 149), true));
+		}
+
+		[Test]
 		public void TurtleGraphics ()
 		{
 			var p = new Path ();
